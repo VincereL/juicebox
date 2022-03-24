@@ -1,4 +1,14 @@
-const { client, getAllUsers, createUser, updateUser } = require("./index");
+const {
+  client,
+  getAllUsers,
+  createUser,
+  updateUser,
+  createPost,
+  updatePost,
+  getAllPosts,
+  getUserById,
+  getPostsByUser,
+} = require("./index");
 
 async function dropTables() {
   try {
@@ -27,7 +37,7 @@ async function createTables() {
             );
             CREATE TABLE posts (
               id SERIAL PRIMARY KEY,
-              "authorId" INTEGER REFERENCES users(id) NOT NULL,
+              authorid INTEGER REFERENCES users(id),
               title VARCHAR(255) NOT NULL,
               content TEXT NOT NULL,
               active BOOLEAN DEFAULT true
@@ -73,12 +83,42 @@ async function createInitialUsers() {
   }
 }
 
+async function createInitialPosts() {
+  try {
+    const [albert, sandra, glamgal] = await getAllUsers();
+
+    await createPost({
+      authorid: albert.id,
+      title: "First Post",
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+    });
+    await createPost({
+      authorid: sandra.id,
+      title: "First Post",
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+    });
+    await createPost({
+      authorid: glamgal.id,
+      title: "First Post",
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+    });
+
+    // a couple more
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function rebuildDB() {
   try {
     client.connect();
     await dropTables();
     await createTables();
     await createInitialUsers();
+    await createInitialPosts();
   } catch (error) {
     console.error(error);
   }
@@ -103,6 +143,14 @@ async function testDB() {
       location: "NYC, NY",
     });
     console.log("Update User Result", updateUserResult);
+    let NewTitle = "This is a title";
+    let NewContent = "This is a content";
+    await createPost({ authorid: 4, title: NewTitle, content: NewContent });
+    console.log("Created a Post");
+    await updatePost(1, { title: "Updated Title", content: "Updated Content" });
+    console.log("Updated a Post");
+    await getAllPosts();
+    await getUserById(4);
     console.log("Finished database tests");
   } catch (error) {
     console.error("Error testing database");
