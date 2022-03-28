@@ -11,7 +11,7 @@ tagsRouter.get("/", async (req, res) => {
   const tags = await getAllTags();
   console.log("I AM RUNNING");
 
-  res.send(tags);
+  res.send({tags});
 });
 
 module.exports = tagsRouter;
