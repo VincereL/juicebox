@@ -11,7 +11,7 @@ postsRouter.get("/", async (req, res) => {
   const posts = await getAllPosts();
   console.log("I AM RUNNING");
 
-  res.send(posts);
+  res.send({posts});
 });
 
 module.exports = postsRouter;

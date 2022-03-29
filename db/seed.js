@@ -205,7 +205,7 @@ async function testDB() {
     console.log("added tags to post");
     const [happy, funny] = await createTags(["#happy", "#funny"]);
     await addTagsToPost(4, [happy, funny]);
-    console.log(await getPostById(4));
+    console.log(await getPostById(1));
     console.log("Calling updatePost on posts[1], only updating tags");
     const updatePostTagsResult = await updatePost(posts[1].id, {
       tags: ["#youcandoanything", "#redfish", "#bluefish"]

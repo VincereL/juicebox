@@ -12,7 +12,7 @@ usersRouter.get("/", async (req, res) => {
   console.log("I AM RUNNING");
   console.log(users);
 
-  res.send(users);
+  res.send({users});
 });
 
 module.exports = usersRouter;
